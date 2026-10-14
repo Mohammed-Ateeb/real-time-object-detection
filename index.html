@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Object Detection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1>Real-Time Object Detection</h1>
+      <p>Show everyday objects to your webcam. A pretrained YOLOv8 model that knows 600 kinds of object, running in your browser, finds and names them.</p>
+    </header>
+
+    <!-- Status line: shows model loading, camera state and errors -->
+    <div id="status" class="status loading" role="status" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      <span id="statusText">Loading the model, please wait...</span>
+    </div>
+
+    <div class="layout">
+      <!-- Live camera feed -->
+      <section class="card camera">
+        <div id="videoBox" class="video-box">
+          <video id="webcam" autoplay playsinline muted></video>
+          <!-- Transparent canvas on top of the video: boxes and labels are drawn here -->
+          <canvas id="overlay"></canvas>
+          <div id="placeholder" class="placeholder">Camera is off</div>
+        </div>
+        <div class="controls">
+          <button id="startBtn" class="btn primary" disabled>Start Camera</button>
+          <button id="stopBtn" class="btn" disabled>Stop Camera</button>
+        </div>
+        <!-- Lets the user switch camera when the computer has more than one -->
+        <label class="camera-picker">
+          Camera
+          <select id="cameraSelect" disabled>
+            <option value="">Start the camera to list cameras</option>
+          </select>
+        </label>
+        <!-- Hides Person, Human face, Clothing... so the object you hold up stands out -->
+        <label class="toggle">
+          <input id="hidePeople" type="checkbox" checked>
+          Hide people and clothing
+        </label>
+      </section>
+
+      <!-- Prediction output -->
+      <section class="card result">
+        <h2>Prediction</h2>
+        <p id="label" class="label">&mdash;</p>
+        <p class="confidence">Confidence: <strong id="confidence">&mdash;</strong></p>
+        <div class="bar"><div id="confidenceBar" class="bar-fill"></div></div>
+
+        <h3>Other objects in view</h3>
+        <ul id="otherObjects" class="guesses">
+          <li class="empty">Start the camera to see detections.</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer class="footer">
+      Everything runs locally in your browser. No video is uploaded anywhere.
+    </footer>
+  </main>
+
+  <!-- ONNX Runtime Web: runs the trained neural network in the browser.
+       A copy is kept in the lib folder so the site works without internet. -->
+  <script src="lib/ort.webgpu.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

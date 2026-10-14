@@ -1,0 +1,278 @@
+/* ---------- Basic setup ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-dark: #0284c7;
+  --success: #4ade80;
+  --error: #f87171;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+/* ---------- Header ---------- */
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  margin-bottom: 8px;
+}
+
+.header p {
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ---------- Status message ---------- */
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  text-align: center;
+}
+
+.status.ready   { color: var(--success); border-color: var(--success); }
+.status.error   { color: var(--error);   border-color: var(--error); }
+.status.loading { color: var(--accent);  border-color: var(--accent); }
+
+/* The spinner is only visible while loading */
+.spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+.status.loading .spinner { display: inline-block; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Two-column layout ---------- */
+.layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* ---------- Camera ---------- */
+.video-box {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Transparent canvas stretched over the video; boxes are drawn on it */
+.video-box canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  background: #020617;
+}
+
+.placeholder.hidden { display: none; }
+
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.camera-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.camera-picker select {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.camera-picker select:disabled { opacity: 0.5; }
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.btn:hover:not(:disabled) { background: var(--border); }
+
+.btn.primary {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.btn.primary:hover:not(:disabled) { background: var(--accent); color: #0f172a; }
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- Prediction ---------- */
+.result h2,
+.result h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.result h3 { margin-top: 24px; }
+
+.label {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-weight: 700;
+  margin: 8px 0 4px;
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+
+.confidence { color: var(--muted); }
+.confidence strong { color: var(--accent); }
+
+.bar {
+  height: 10px;
+  margin-top: 12px;
+  background: var(--bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.guesses {
+  list-style: none;
+  margin-top: 8px;
+}
+
+.guesses li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  text-transform: capitalize;
+}
+
+.guesses li:last-child { border-bottom: none; }
+.guesses li span:last-child { color: var(--muted); flex-shrink: 0; }
+.guesses li.empty { color: var(--muted); text-transform: none; }
+
+/* ---------- Footer ---------- */
+.footer {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* ---------- Responsive: stack the cards on small screens ---------- */
+@media (max-width: 760px) {
+  .layout { grid-template-columns: 1fr; }
+}
